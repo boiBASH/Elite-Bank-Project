@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 
 # Load the trained model
-model = joblib.load("best_model.pkl")
+model = joblib.load("model.pkl")
 
 # Custom CSS for Dark Mode Theme
 st.markdown(
