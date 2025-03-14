@@ -1,0 +1,46 @@
+name: ML Pipeline CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  train-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Step 1: Checkout Code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # Step 3: Install Dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Step 4: Run Unit Tests
+      - name: Run tests
+        run: |
+          pytest tests/  # Ensure you have a `tests/` folder with unit tests
+
+      # Step 5: Train Model & Log to MLflow
+      - name: Train Model & Log to MLflow
+        run: |
+          python train.py  # Ensure your ML training script is named `train.py`
+
+      # Step 6: Deploy Streamlit App to Streamlit Cloud
+      - name: Deploy to Streamlit
+        run: |
+          git push origin main  # This triggers Streamlit Cloud to deploy automatically
+
